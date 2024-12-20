@@ -1,7 +1,7 @@
 # Proof of Concept (POC) - Docling Integration
 
 ## Description
-This repository contains a proof of concept (POC) intended to test integration with the Python library [Docling](https://github.com/docling). The goal of this experiment is to create a simple web application that allows:
+This repository contains a proof of concept (POC) intended to test integration with the Python library [Docling](https://github.com/DS4SD/docling). The goal of this experiment is to create a simple web application that allows:
 
 1. Upload a file to the server.
 2. Process the file using a service with the Docling library installed.

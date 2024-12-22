@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  svc-docling:
+    build:
+      context: ./svc-docling
+      dockerfile: Dockerfile
+    volumes:
+      - ./svc-docling:/app

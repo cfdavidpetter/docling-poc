@@ -1,15 +1,15 @@
 version: "3.9"
 
 services:
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+  web:
+    build: ./web/docker/php
+    volumes:
+      - ./web/:/var/www
+    depends_on:
+      - rabbitmq
+      - mysql
+    networks:
+      - poc-docling
 
   svc-docling:
     build:
@@ -19,3 +19,52 @@ services:
       - ./svc-docling:/app
     depends_on:
       - rabbitmq
+      - mysql
+      - nginx
+    networks:
+      - poc-docling
+
+  nginx:
+    build: ./web/docker/nginx
+    restart: always
+    ports:
+      - "5400:80"
+    volumes:
+      - "./web:/var/www"
+    depends_on:
+      - rabbitmq
+      - mysql
+    networks:
+      - poc-docling
+
+  mysql:
+    image: mysql:5.7.22
+    platform: linux/amd64
+    command: --innodb-use-native-aio=0
+    restart: always
+    ports:
+      - "5401:3306"
+    volumes:
+      - "./database/storage:/var/lib/mysql"
+      - "./database/my.cnf:/etc/mysql/my.cnf"
+    environment:
+      MYSQL_DATABASE: db_docling
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - poc-docling
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5403:5672"
+      - "5404:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: root
+    networks:
+      - poc-docling
+
+networks:
+    poc-docling:
+        driver: bridge

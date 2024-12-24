@@ -8,6 +8,8 @@ from docling.document_converter import DocumentConverter
 
 # Queue configuration
 RABBITMQ_HOST = 'rabbitmq'
+RABBITMQ_USER = 'root'
+RABBITMQ_PASSWORD = 'root'
 PDF_QUEUE = 'pdf_queue'
 JSON_QUEUE = 'json_queue'
 
@@ -65,7 +67,11 @@ def process_file(ch, method, properties, body):
 print("Starting service...")
 
 # Connect to RabbitMQ
-connection = pika.BlockingConnection(pika.ConnectionParameters(host=RABBITMQ_HOST))
+credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASSWORD)
+connection = pika.BlockingConnection(pika.ConnectionParameters(
+    host=RABBITMQ_HOST,
+    credentials=credentials
+))
 channel = connection.channel()
 
 print("Connecting with queue...")

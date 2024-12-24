@@ -3,4 +3,5 @@
 
 svc-docling/output/*
 svc-docling/pdfs/*
+database/storage/*
 !.gitkeep
